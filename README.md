@@ -1,9 +1,5 @@
 # AI Data Analyst Chatbot 🤖📊
 
-[![AI-Powered](https://img.shields.io/badge/AI-Powered-blue)](https://github.com/)
-[![Flask 2.3.3](https://img.shields.io/badge/Flask-2.3.3-green)](https://flask.palletsprojects.com/)
-[![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-yellow)](https://www.python.org/)
-
 > A powerful, AI-driven data analysis platform that lets you interact with datasets using natural language. Built with Flask and Groq AI, it transforms complex analyses into simple conversational queries.
 
 ---
@@ -190,3 +186,4 @@ DEBUG=True
 <img width="1899" height="865" alt="Screenshot 2025-09-28 160700" src="https://github.com/user-attachments/assets/2ea793e2-25cc-4a77-8eea-4fa4e0555489" />
 
 ---
+
