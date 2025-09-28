@@ -80,7 +80,7 @@ ai-data-analyst/
 **Clone the repository**
 
 ```bash
-git clone https://github.com/yourusername/ai-data-analyst.git
+git clone https://github.com/Pragyan2004/AI-Data-Analyst-Chatbot.git
 cd ai-data-analyst
 ```
 
@@ -186,4 +186,5 @@ DEBUG=True
 <img width="1899" height="865" alt="Screenshot 2025-09-28 160700" src="https://github.com/user-attachments/assets/2ea793e2-25cc-4a77-8eea-4fa4e0555489" />
 
 ---
+
 
