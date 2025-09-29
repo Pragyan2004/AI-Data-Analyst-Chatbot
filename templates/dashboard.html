@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-800">Analytics Dashboard</h1>
+        <div class="flex space-x-4">
+            <button class="btn btn-secondary">
+                <i class="fas fa-download mr-2"></i>Export
+            </button>
+            <button class="btn btn-primary" onclick="refreshDashboard()">
+                <i class="fas fa-sync-alt mr-2"></i>Refresh
+            </button>
+        </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="stats-card animate-fadeInUp">
+            <i class="fas fa-database text-3xl mb-4 opacity-80"></i>
+            <h3 class="text-2xl font-bold mb-2" id="total-rows">0</h3>
+            <p class="opacity-90">Total Rows</p>
+        </div>
+        <div class="stats-card animate-fadeInUp" style="animation-delay: 0.1s">
+            <i class="fas fa-columns text-3xl mb-4 opacity-80"></i>
+            <h3 class="text-2xl font-bold mb-2" id="total-cols">0</h3>
+            <p class="opacity-90">Total Columns</p>
+        </div>
+        <div class="stats-card animate-fadeInUp" style="animation-delay: 0.2s">
+            <i class="fas fa-calculator text-3xl mb-4 opacity-80"></i>
+            <h3 class="text-2xl font-bold mb-2" id="numeric-cols">0</h3>
+            <p class="opacity-90">Numeric Columns</p>
+        </div>
+        <div class="stats-card animate-fadeInUp" style="animation-delay: 0.3s">
+            <i class="fas fa-tags text-3xl mb-4 opacity-80"></i>
+            <h3 class="text-2xl font-bold mb-2" id="categorical-cols">0</h3>
+            <p class="opacity-90">Categorical Columns</p>
+        </div>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-8">
+        <div class="card">
+            <h2 class="text-2xl font-bold mb-6">Recent Analyses</h2>
+            <div id="recent-analyses" class="space-y-4">
+                <div class="flex items-center justify-center py-8">
+                    <p class="text-gray-500">No recent analyses found</p>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <h2 class="text-2xl font-bold mb-6">Data Quality Overview</h2>
+            <div id="quality-metrics" class="space-y-4">
+                <div class="flex items-center justify-center py-8">
+                    <p class="text-gray-500">Upload data to see quality metrics</p>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <h2 class="text-2xl font-bold mb-6">Quick Actions</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <a href="{{ url_for('analyze') }}" class="feature-card text-center p-6">
+                    <i class="fas fa-rocket text-3xl text-blue-600 mb-3"></i>
+                    <h3 class="font-bold mb-2">New Analysis</h3>
+                    <p class="text-sm text-gray-600">Start a new data analysis</p>
+                </a>
+                <a href="{{ url_for('insights') }}" class="feature-card text-center p-6">
+                    <i class="fas fa-lightbulb text-3xl text-yellow-600 mb-3"></i>
+                    <h3 class="font-bold mb-2">AI Insights</h3>
+                    <p class="text-sm text-gray-600">Get automated insights</p>
+                </a>
+                <a href="{{ url_for('history') }}" class="feature-card text-center p-6">
+                    <i class="fas fa-history text-3xl text-green-600 mb-3"></i>
+                    <h3 class="font-bold mb-2">View History</h3>
+                    <p class="text-sm text-gray-600">Past analyses</p>
+                </a>
+                <button onclick="clearData()" class="feature-card text-center p-6">
+                    <i class="fas fa-trash text-3xl text-red-600 mb-3"></i>
+                    <h3 class="font-bold mb-2">Clear Data</h3>
+                    <p class="text-sm text-gray-600">Remove current dataset</p>
+                </button>
+            </div>
+        </div>
+        <div class="card">
+            <h2 class="text-2xl font-bold mb-6">Performance Metrics</h2>
+            <div class="space-y-6">
+                <div>
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-700">Query Success Rate</span>
+                        <span class="font-bold text-green-600">98%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 98%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-700">Average Response Time</span>
+                        <span class="font-bold text-blue-600">1.2s</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 85%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-700">Data Processing Speed</span>
+                        <span class="font-bold text-purple-600">Fast</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 92%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function refreshDashboard() {
+    fetch('/api/data_stats')
+        .then(response => response.json())
+        .then(data => {
+            if (!data.error) {
+                document.getElementById('total-rows').textContent = data.rows.toLocaleString();
+                document.getElementById('total-cols').textContent = data.columns;
+                document.getElementById('numeric-cols').textContent = data.numeric_cols;
+                document.getElementById('categorical-cols').textContent = data.categorical_cols;
+            }
+        });
+}
+
+function clearData() {
+    if (confirm('Are you sure you want to clear the current dataset?')) {
+        fetch('/api/clear_data', { method: 'POST' })
+            .then(() => {
+                showNotification('Data cleared successfully', 'success');
+                refreshDashboard();
+            });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    refreshDashboard();
+    animateProgressBars();
+});
+</script>
+{% endblock %}
