@@ -1,0 +1,8 @@
+flask
+pandas
+groq
+python-dotenv
+python-dateutil
+matrplotlib
+seaborn
+openpyxl

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [
   {
     "timestamp": "2025-09-28T16:08:03.508069",
@@ -96,4 +97,85 @@
       }
     }
   }
+=======
+[
+  {
+    "timestamp": "2026-01-28T17:12:02.077106",
+    "query": "Show summary statistics",
+    "code": "result = df.describe()",
+    "result": {
+      "Precision": {
+        "count": 25.0,
+        "mean": 0.9954545454545455,
+        "std": 0.01376204706407952,
+        "min": 0.95,
+        "25%": 1.0,
+        "50%": 1.0,
+        "75%": 1.0,
+        "max": 1.0
+      },
+      "Recall": {
+        "count": 25.0,
+        "mean": 0.9954545454545455,
+        "std": 0.01376204706407952,
+        "min": 0.95,
+        "25%": 1.0,
+        "50%": 1.0,
+        "75%": 1.0,
+        "max": 1.0
+      },
+      "F1 Score": {
+        "count": 25.0,
+        "mean": 0.9954545454545455,
+        "std": 0.01376204706407952,
+        "min": 0.95,
+        "25%": 1.0,
+        "50%": 1.0,
+        "75%": 1.0,
+        "max": 1.0
+      },
+      "Support": {
+        "count": 25.0,
+        "mean": 52.83981818181818,
+        "std": 116.58327340227706,
+        "min": 0.9954545454545456,
+        "25%": 20.0,
+        "50%": 20.0,
+        "75%": 20.0,
+        "max": 440.0
+      }
+    }
+  },
+  {
+    "timestamp": "2026-01-28T17:12:08.708639",
+    "query": "Show correlation matrix",
+    "code": "result = df[['Precision', 'Recall', 'F1 Score', 'Support']].corr(min_periods=1)",
+    "result": {
+      "Precision": {
+        "Precision": 1.0,
+        "Recall": 1.0,
+        "F1 Score": 1.0,
+        "Support": 2.127721526058e-15
+      },
+      "Recall": {
+        "Precision": 1.0,
+        "Recall": 1.0,
+        "F1 Score": 1.0,
+        "Support": 2.127721526058e-15
+      },
+      "F1 Score": {
+        "Precision": 1.0,
+        "Recall": 1.0,
+        "F1 Score": 1.0,
+        "Support": 2.127721526058e-15
+      },
+      "Support": {
+        "Precision": 2.127721526058e-15,
+        "Recall": 2.127721526058e-15,
+        "F1 Score": 2.127721526058e-15,
+        "Support": 1.0
+      }
+    }
+  }
+>>>>>>> b318fad (Enhance UI with rich aesthetics, glassmorphism, dynamic dashboard, and support for all CSV files)
 ]

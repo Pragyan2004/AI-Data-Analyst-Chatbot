@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "base.html" %}
 
 {% block title %}AI Insights{% endblock %}
@@ -240,4 +241,248 @@ document.addEventListener('DOMContentLoaded', function() {
     animateProgressBars();
 });
 </script>
+=======
+{% extends "base.html" %}
+
+{% block title %}AI Insights{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-800">AI-Powered Insights</h1>
+        <button onclick="generateInsights()" class="btn btn-primary">
+            <i class="fas fa-robot mr-2"></i>Generate Insights
+        </button>
+    </div>
+
+    {% if not insights %}
+    <div class="card text-center py-16">
+        <i class="fas fa-robot text-6xl text-gray-300 mb-6"></i>
+        <h2 class="text-2xl font-bold text-gray-600 mb-4">No Data Available</h2>
+        <p class="text-gray-500 mb-6 max-w-md mx-auto">
+            Upload a dataset and generate AI-powered insights to discover patterns, anomalies, and opportunities in your data.
+        </p>
+        <div class="flex justify-center space-x-4">
+            <a href="{{ url_for('analyze') }}" class="btn btn-primary">
+                <i class="fas fa-upload mr-2"></i>Upload Data
+            </a>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+                <i class="fas fa-dashboard mr-2"></i>Go to Dashboard
+            </a>
+        </div>
+    </div>
+    {% else %}
+    <div class="grid md:grid-cols-3 gap-6 mb-8">
+        <div class="insight-card">
+            <i class="fas fa-check-circle text-2xl text-green-500 mb-3"></i>
+            <h3 class="text-lg font-semibold mb-2">Data Quality</h3>
+            <p class="text-gray-600">
+                {% if insights.data_quality and insights.data_quality.score %}
+                    {{ insights.data_quality.score }}% Complete
+                {% else %}
+                    Analyzing...
+                {% endif %}
+            </p>
+        </div>
+        <div class="insight-card">
+            <i class="fas fa-chart-line text-2xl text-blue-500 mb-3"></i>
+            <h3 class="text-lg font-semibold mb-2">Key Patterns</h3>
+            <p class="text-gray-600">
+                {% if insights.patterns %}
+                    {{ insights.patterns | length }} Patterns Found
+                {% else %}
+                    No patterns
+                {% endif %}
+            </p>
+        </div>
+        <div class="insight-card">
+            <i class="fas fa-exclamation-triangle text-2xl text-yellow-500 mb-3"></i>
+            <h3 class="text-lg font-semibold mb-2">Issues Found</h3>
+            <p class="text-gray-600">
+                {% if insights.issues %}
+                    {{ insights.issues | length }} Issues Identified
+                {% else %}
+                    No issues
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-8">
+        <div class="card">
+            <h2 class="text-2xl font-bold mb-6">Data Quality Assessment</h2>
+            <div class="space-y-4">
+                {% if insights.data_quality and insights.data_quality.metrics %}
+                    {% for metric, value in insights.data_quality.metrics.items() %}
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span class="text-gray-700 capitalize">{{ metric.replace('_', ' ') }}</span>
+                            <span class="font-semibold">{{ value }}%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: {{ value }}%"></div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-gray-500 text-center py-4">No data quality metrics available</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="card">
+            <h2 class="text-2xl font-bold mb-6">Key Patterns Discovered</h2>
+            <div class="space-y-4">
+                {% if insights.patterns %}
+                    {% for pattern in insights.patterns %}
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <div class="flex items-start">
+                            <i class="fas fa-lightbulb text-blue-500 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-semibold text-blue-800">
+                                    {{ pattern.title if pattern.title else "Pattern " ~ loop.index }}
+                                </h4>
+                                <p class="text-blue-700 text-sm mt-1">
+                                    {{ pattern.description if pattern.description else pattern }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-gray-500 text-center py-4">No patterns discovered</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="card">
+            <h2 class="text-2xl font-bold mb-6">Data Issues & Recommendations</h2>
+            <div class="space-y-4">
+                {% if insights.issues %}
+                    {% for issue in insights.issues %}
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                        <div class="flex items-start">
+                            <i class="fas fa-exclamation-triangle text-yellow-500 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-semibold text-yellow-800">
+                                    {{ issue.type if issue.type else "Issue " ~ loop.index }}
+                                </h4>
+                                <p class="text-yellow-700 text-sm mt-1">
+                                    {{ issue.description if issue.description else issue }}
+                                </p>
+                                {% if issue.recommendation %}
+                                <p class="text-yellow-600 text-xs mt-2">
+                                    <strong>Recommendation:</strong> {{ issue.recommendation }}
+                                </p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-gray-500 text-center py-4">No major issues found</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="card">
+            <h2 class="text-2xl font-bold mb-6">Statistical Summary</h2>
+            <div class="space-y-4">
+                {% if insights.statistical_summary %}
+                    {% for stat, value in insights.statistical_summary.items() %}
+                    <div class="flex justify-between items-center py-2 border-b border-gray-200">
+                        <span class="text-gray-700 capitalize">{{ stat.replace('_', ' ') }}</span>
+                        <span class="font-semibold text-blue-600">
+                            {% if value is number %}
+                                {{ "%.2f"|format(value) }}
+                            {% else %}
+                                {{ value }}
+                            {% endif %}
+                        </span>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-gray-500 text-center py-4">No statistical summary available</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="card lg:col-span-2">
+            <h2 class="text-2xl font-bold mb-6">Analysis Recommendations</h2>
+            <div class="grid md:grid-cols-2 gap-4">
+                {% if insights.recommendations %}
+                    {% for rec in insights.recommendations %}
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                        <div class="flex items-start">
+                            <i class="fas fa-bullseye text-green-500 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-semibold text-green-800">
+                                    {{ rec.title if rec.title else "Recommendation " ~ loop.index }}
+                                </h4>
+                                <p class="text-green-700 text-sm mt-1">
+                                    {{ rec.description if rec.description else rec }}
+                                </p>
+                                <button onclick="applyRecommendation('{{ rec.query if rec.query else rec }}')" 
+                                        class="btn btn-primary text-xs mt-2">
+                                    <i class="fas fa-play mr-1"></i>Try This
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-span-2 text-center py-4">
+                        <p class="text-gray-500">No recommendations available</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function generateInsights() {
+    const btn = event.target;
+    const originalText = btn.innerHTML;
+    
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Generating...';
+    btn.disabled = true;
+    
+    fetch('/api/generate_insights', { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                showNotification(data.error, 'error');
+            } else {
+                showNotification('Insights generated successfully!', 'success');
+                setTimeout(() => location.reload(), 1000);
+            }
+        })
+        .catch(error => {
+            showNotification('Error generating insights: ' + error, 'error');
+        })
+        .finally(() => {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        });
+}
+
+function applyRecommendation(query) {
+    sessionStorage.setItem('suggestedQuery', query);
+    window.location.href = "{{ url_for('analyze') }}";
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const suggestedQuery = sessionStorage.getItem('suggestedQuery');
+    if (suggestedQuery && window.location.pathname === "{{ url_for('analyze') }}") {
+        const queryInput = document.getElementById('query-input');
+        if (queryInput) {
+            queryInput.value = suggestedQuery;
+            sessionStorage.removeItem('suggestedQuery');
+        }
+    }
+    
+    animateProgressBars();
+});
+</script>
+>>>>>>> b318fad (Enhance UI with rich aesthetics, glassmorphism, dynamic dashboard, and support for all CSV files)
 {% endblock %}
