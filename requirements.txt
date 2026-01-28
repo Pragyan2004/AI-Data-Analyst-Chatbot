@@ -3,8 +3,7 @@ pandas
 groq
 python-dotenv
 python-dateutil
-matrplotlib
+matplotlib
 seaborn
 openpyxl
-matrplotlib
 
