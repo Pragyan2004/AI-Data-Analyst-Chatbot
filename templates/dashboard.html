@@ -1,153 +1,3 @@
-<<<<<<< HEAD
-{% extends "base.html" %}
-
-{% block title %}Dashboard{% endblock %}
-
-{% block content %}
-<div class="max-w-7xl mx-auto">
-    <div class="flex justify-between items-center mb-8">
-        <h1 class="text-4xl font-bold text-gray-800">Analytics Dashboard</h1>
-        <div class="flex space-x-4">
-            <button class="btn btn-secondary">
-                <i class="fas fa-download mr-2"></i>Export
-            </button>
-            <button class="btn btn-primary" onclick="refreshDashboard()">
-                <i class="fas fa-sync-alt mr-2"></i>Refresh
-            </button>
-        </div>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div class="stats-card animate-fadeInUp">
-            <i class="fas fa-database text-3xl mb-4 opacity-80"></i>
-            <h3 class="text-2xl font-bold mb-2" id="total-rows">0</h3>
-            <p class="opacity-90">Total Rows</p>
-        </div>
-        <div class="stats-card animate-fadeInUp" style="animation-delay: 0.1s">
-            <i class="fas fa-columns text-3xl mb-4 opacity-80"></i>
-            <h3 class="text-2xl font-bold mb-2" id="total-cols">0</h3>
-            <p class="opacity-90">Total Columns</p>
-        </div>
-        <div class="stats-card animate-fadeInUp" style="animation-delay: 0.2s">
-            <i class="fas fa-calculator text-3xl mb-4 opacity-80"></i>
-            <h3 class="text-2xl font-bold mb-2" id="numeric-cols">0</h3>
-            <p class="opacity-90">Numeric Columns</p>
-        </div>
-        <div class="stats-card animate-fadeInUp" style="animation-delay: 0.3s">
-            <i class="fas fa-tags text-3xl mb-4 opacity-80"></i>
-            <h3 class="text-2xl font-bold mb-2" id="categorical-cols">0</h3>
-            <p class="opacity-90">Categorical Columns</p>
-        </div>
-    </div>
-
-    <div class="grid lg:grid-cols-2 gap-8">
-        <div class="card">
-            <h2 class="text-2xl font-bold mb-6">Recent Analyses</h2>
-            <div id="recent-analyses" class="space-y-4">
-                <div class="flex items-center justify-center py-8">
-                    <p class="text-gray-500">No recent analyses found</p>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <h2 class="text-2xl font-bold mb-6">Data Quality Overview</h2>
-            <div id="quality-metrics" class="space-y-4">
-                <div class="flex items-center justify-center py-8">
-                    <p class="text-gray-500">Upload data to see quality metrics</p>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <h2 class="text-2xl font-bold mb-6">Quick Actions</h2>
-            <div class="grid grid-cols-2 gap-4">
-                <a href="{{ url_for('analyze') }}" class="feature-card text-center p-6">
-                    <i class="fas fa-rocket text-3xl text-blue-600 mb-3"></i>
-                    <h3 class="font-bold mb-2">New Analysis</h3>
-                    <p class="text-sm text-gray-600">Start a new data analysis</p>
-                </a>
-                <a href="{{ url_for('insights') }}" class="feature-card text-center p-6">
-                    <i class="fas fa-lightbulb text-3xl text-yellow-600 mb-3"></i>
-                    <h3 class="font-bold mb-2">AI Insights</h3>
-                    <p class="text-sm text-gray-600">Get automated insights</p>
-                </a>
-                <a href="{{ url_for('history') }}" class="feature-card text-center p-6">
-                    <i class="fas fa-history text-3xl text-green-600 mb-3"></i>
-                    <h3 class="font-bold mb-2">View History</h3>
-                    <p class="text-sm text-gray-600">Past analyses</p>
-                </a>
-                <button onclick="clearData()" class="feature-card text-center p-6">
-                    <i class="fas fa-trash text-3xl text-red-600 mb-3"></i>
-                    <h3 class="font-bold mb-2">Clear Data</h3>
-                    <p class="text-sm text-gray-600">Remove current dataset</p>
-                </button>
-            </div>
-        </div>
-        <div class="card">
-            <h2 class="text-2xl font-bold mb-6">Performance Metrics</h2>
-            <div class="space-y-6">
-                <div>
-                    <div class="flex justify-between mb-2">
-                        <span class="text-gray-700">Query Success Rate</span>
-                        <span class="font-bold text-green-600">98%</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 98%"></div>
-                    </div>
-                </div>
-                <div>
-                    <div class="flex justify-between mb-2">
-                        <span class="text-gray-700">Average Response Time</span>
-                        <span class="font-bold text-blue-600">1.2s</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 85%"></div>
-                    </div>
-                </div>
-                <div>
-                    <div class="flex justify-between mb-2">
-                        <span class="text-gray-700">Data Processing Speed</span>
-                        <span class="font-bold text-purple-600">Fast</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 92%"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-{% endblock %}
-
-{% block scripts %}
-<script>
-function refreshDashboard() {
-    fetch('/api/data_stats')
-        .then(response => response.json())
-        .then(data => {
-            if (!data.error) {
-                document.getElementById('total-rows').textContent = data.rows.toLocaleString();
-                document.getElementById('total-cols').textContent = data.columns;
-                document.getElementById('numeric-cols').textContent = data.numeric_cols;
-                document.getElementById('categorical-cols').textContent = data.categorical_cols;
-            }
-        });
-}
-
-function clearData() {
-    if (confirm('Are you sure you want to clear the current dataset?')) {
-        fetch('/api/clear_data', { method: 'POST' })
-            .then(() => {
-                showNotification('Data cleared successfully', 'success');
-                refreshDashboard();
-            });
-    }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    refreshDashboard();
-    animateProgressBars();
-});
-</script>
-=======
 {% extends "base.html" %}
 
 {% block title %}Dashboard{% endblock %}
@@ -165,28 +15,6 @@ document.addEventListener('DOMContentLoaded', function() {
             </button>
         </div>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div class="stats-card animate-fadeInUp">
-            <i class="fas fa-database text-3xl mb-4 opacity-80"></i>
-            <h3 class="text-3xl font-bold mb-2" id="total-rows">0</h3>
-            <p class="opacity-90 font-medium">Total Rows</p>
-        </div>
-        <div class="stats-card animate-fadeInUp" style="animation-delay: 0.1s">
-            <i class="fas fa-columns text-3xl mb-4 opacity-80"></i>
-            <h3 class="text-3xl font-bold mb-2" id="total-cols">0</h3>
-            <p class="opacity-90 font-medium">Total Columns</p>
-        </div>
-        <div class="stats-card animate-fadeInUp" style="animation-delay: 0.2s">
-            <i class="fas fa-calculator text-3xl mb-4 opacity-80"></i>
-            <h3 class="text-3xl font-bold mb-2" id="numeric-cols">0</h3>
-            <p class="opacity-90 font-medium">Numeric Columns</p>
-        </div>
-        <div class="stats-card animate-fadeInUp" style="animation-delay: 0.3s">
-            <i class="fas fa-tags text-3xl mb-4 opacity-80"></i>
-            <h3 class="text-3xl font-bold mb-2" id="categorical-cols">0</h3>
-            <p class="opacity-90 font-medium">Categorical Columns</p>
-        </div>
-    </div>
 
     <div class="grid lg:grid-cols-2 gap-8">
         <div class="card">
@@ -200,16 +28,39 @@ document.addEventListener('DOMContentLoaded', function() {
         <div class="card">
             <h2 class="text-2xl font-bold mb-6" style="color: var(--primary-color)">Data Quality Overview</h2>
             <div id="quality-metrics" class="space-y-4">
+                {% if stats and stats.completeness is defined %}
+                <div class="space-y-6">
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium" style="color: var(--text-main)">Data Completeness</span>
+                            <span class="font-bold text-green-500">{{ stats.completeness }}%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill bg-green-500" style="width: {{ stats.completeness }}%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium" style="color: var(--text-main)">Memory Usage</span>
+                            <span class="font-bold text-blue-500">{{ stats.memory }}</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill bg-blue-500" style="width: 95%"></div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
                 <div class="flex items-center justify-center py-8">
                     <p style="color: var(--text-muted)">Upload data to see quality metrics</p>
                 </div>
+                {% endif %}
             </div>
         </div>
         <div class="card">
             <h2 class="text-2xl font-bold mb-6" style="color: var(--primary-color)">Quick Actions</h2>
             <div class="grid grid-cols-2 gap-4">
                 <a href="{{ url_for('analyze') }}"
-                    class="feature-card text-center p-6 flex flex-col items-center justify-center hover:no-underline">
+                    class="feature-card hover-lift text-center p-6 flex flex-col items-center justify-center hover:no-underline">
                     <div
                         class="w-12 h-12 rounded-full flex items-center justify-center mb-3 bg-indigo-100 dark:bg-indigo-900">
                         <i class="fas fa-rocket text-xl text-indigo-600 dark:text-indigo-300"></i>
@@ -217,17 +68,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     <h3 class="font-bold mb-1" style="color: var(--text-main)">New Analysis</h3>
                     <p class="text-xs" style="color: var(--text-muted)">Start fresh</p>
                 </a>
-                <a href="{{ url_for('insights') }}"
-                    class="feature-card text-center p-6 flex flex-col items-center justify-center hover:no-underline">
-                    <div
-                        class="w-12 h-12 rounded-full flex items-center justify-center mb-3 bg-yellow-100 dark:bg-yellow-900">
-                        <i class="fas fa-lightbulb text-xl text-yellow-600 dark:text-yellow-300"></i>
-                    </div>
-                    <h3 class="font-bold mb-1" style="color: var(--text-main)">AI Insights</h3>
-                    <p class="text-xs" style="color: var(--text-muted)">Get suggestions</p>
-                </a>
                 <a href="{{ url_for('history') }}"
-                    class="feature-card text-center p-6 flex flex-col items-center justify-center hover:no-underline">
+                    class="feature-card hover-lift text-center p-6 flex flex-col items-center justify-center hover:no-underline">
                     <div
                         class="w-12 h-12 rounded-full flex items-center justify-center mb-3 bg-green-100 dark:bg-green-900">
                         <i class="fas fa-history text-xl text-green-600 dark:text-green-300"></i>
@@ -236,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <p class="text-xs" style="color: var(--text-muted)">Past queries</p>
                 </a>
                 <button onclick="clearData()"
-                    class="feature-card text-center p-6 flex flex-col items-center justify-center w-full hover:no-underline">
+                    class="feature-card hover-lift text-center p-6 flex flex-col items-center justify-center w-full hover:no-underline">
                     <div
                         class="w-12 h-12 rounded-full flex items-center justify-center mb-3 bg-red-100 dark:bg-red-900">
                         <i class="fas fa-trash text-xl text-red-600 dark:text-red-300"></i>
@@ -248,34 +90,46 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
         <div class="card">
             <h2 class="text-2xl font-bold mb-6" style="color: var(--primary-color)">Performance Metrics</h2>
-            <div class="space-y-8">
+            <div class="space-y-8" id="performance-metrics">
+                {% set perf = stats.performance if stats and stats.performance else {'success_rate': 0, 'avg_time': 0,
+                'total': 0} %}
                 <div>
                     <div class="flex justify-between mb-2">
                         <span class="font-medium" style="color: var(--text-main)">Query Success Rate</span>
-                        <span class="font-bold text-green-500">98%</span>
+                        <span class="font-bold text-green-500" id="success-rate-val">{{ perf.success_rate }}%</span>
                     </div>
                     <div class="progress-bar">
-                        <div class="progress-fill bg-green-500" style="width: 98%"></div>
+                        <div class="progress-fill bg-green-500" id="success-rate-bar"
+                            style="width: {{ perf.success_rate }}%"></div>
                     </div>
                 </div>
                 <div>
                     <div class="flex justify-between mb-2">
-                        <span class="font-medium" style="color: var(--text-main)">Response Time</span>
-                        <span class="font-bold text-blue-500">1.2s</span>
+                        <span class="font-medium" style="color: var(--text-main)">Avg Response Time</span>
+                        <span class="font-bold text-blue-500" id="avg-time-val">{{ perf.avg_time }}s</span>
                     </div>
                     <div class="progress-bar">
-                        <div class="progress-fill bg-blue-500" style="width: 85%"></div>
+                        <div class="progress-fill bg-blue-500" id="avg-time-bar"
+                            style="width: {{ (perf.avg_time / 5 * 100) if perf.avg_time < 5 else 100 }}%"></div>
                     </div>
                 </div>
                 <div>
                     <div class="flex justify-between mb-2">
-                        <span class="font-medium" style="color: var(--text-main)">Processing Speed</span>
-                        <span class="font-bold text-purple-500">Fast</span>
+                        <span class="font-medium" style="color: var(--text-main)">Total Analyses</span>
+                        <span class="font-bold text-purple-500" id="total-analyses-val">{{ perf.total }}</span>
                     </div>
                     <div class="progress-bar">
-                        <div class="progress-fill bg-purple-500" style="width: 92%"></div>
+                        <div class="progress-fill bg-purple-500" id="total-analyses-bar" style="width: 100%"></div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Distribution Chart -->
+        <div class="card lg:col-span-2">
+            <h2 class="text-2xl font-bold mb-6" style="color: var(--primary-color)">Data Type Distribution</h2>
+            <div class="h-[300px] relative">
+                <canvas id="distributionChart"></canvas>
             </div>
         </div>
     </div>
@@ -290,18 +144,71 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
                 if (!data.error) {
-                    animateValue("total-rows", 0, data.rows || 0, 1000);
-                    animateValue("total-cols", 0, data.columns || 0, 1000);
-                    animateValue("numeric-cols", 0, data.numeric_cols || 0, 1000);
-                    animateValue("categorical-cols", 0, data.categorical_cols || 0, 1000);
 
-                    // Update Quality Metrics dynamically based on loaded data
-                    updateQualityMetrics(data);
+                    // Update Quality Metrics dynamically
+                    const container = document.getElementById('quality-metrics');
+                    container.innerHTML = `
+                        <div class="space-y-6">
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="font-medium" style="color: var(--text-main)">Data Completeness</span>
+                                    <span class="font-bold text-green-500">${data.completeness}%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill bg-green-500" data-progress="${data.completeness}"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="font-medium" style="color: var(--text-main)">Memory Usage</span>
+                                    <span class="font-bold text-blue-500">${data.memory}</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill bg-blue-500" data-progress="95"></div>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <h4 class="text-sm font-bold mb-2" style="color: var(--text-main)">Column Null Counts</h4>
+                                <div class="max-h-32 overflow-y-auto custom-scrollbar space-y-2 pr-2">
+                                    ${Object.entries(data.null_counts).map(([col, count]) => `
+                                        <div class="flex justify-between text-xs p-2 rounded bg-black/5">
+                                            <span style="color: var(--text-muted)">${col}</span>
+                                            <span class="font-bold ${count > 0 ? 'text-red-500' : 'text-green-500'}">${count} nulls</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    // Update Performance Metrics
+                    if (data.performance) {
+                        const perf = data.performance;
+                        document.getElementById('success-rate-val').textContent = perf.success_rate + '%';
+                        const successBar = document.getElementById('success-rate-bar');
+                        successBar.setAttribute('data-progress', perf.success_rate);
+                        successBar.style.width = perf.success_rate + '%';
+
+                        document.getElementById('avg-time-val').textContent = perf.avg_time + 's';
+                        const timeBar = document.getElementById('avg-time-bar');
+                        // Scale 0-5s to 0-100%
+                        const timeProgress = Math.min(100, (perf.avg_time / 5) * 100);
+                        timeBar.setAttribute('data-progress', timeProgress);
+                        timeBar.style.width = timeProgress + '%';
+
+                        document.getElementById('total-analyses-val').textContent = perf.total;
+                    }
+
+                    // Render Distribution Chart
+                    renderDistributionChart(data.numeric_cols, data.categorical_cols);
+
+                    setTimeout(() => {
+                        container.querySelectorAll('.progress-fill').forEach(el => {
+                            const progress = el.getAttribute('data-progress');
+                            if (progress) el.style.width = progress + '%';
+                        });
+                    }, 100);
                 } else {
-                    document.getElementById('total-rows').textContent = '0';
-                    document.getElementById('total-cols').textContent = '0';
-                    document.getElementById('numeric-cols').textContent = '0';
-                    document.getElementById('categorical-cols').textContent = '0';
                     document.getElementById('quality-metrics').innerHTML = `
                         <div class="flex items-center justify-center py-8">
                             <p style="color: var(--text-muted)">Upload data to see quality metrics</p>
@@ -309,22 +216,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
 
-        // Fetch Recent History (Simulated via API or standard history route)
-        // Since we don't have a dedicated API for history summary yet, we'll fetch the history page content or use a new endpoint.
-        // For now, let's assume we add a small endpoint or just parse localstorage if we stored it. 
-        // BETTER: Create a simple API endpoint for history in app.py first. 
-        // I will assume /api/history_recent exists or create it.
+        // Fetch Recent History
         fetch('/api/history_recent')
             .then(response => response.json())
             .then(data => {
                 const container = document.getElementById('recent-analyses');
                 if (data && data.length > 0) {
                     container.innerHTML = data.map(item => `
-                       <div class="p-3 rounded-lg border hover-lift" style="border-color: var(--border-color); background-color: var(--background-bg);">
-                           <div class="flex justify-between items-start">
-                               <p class="font-medium text-sm line-clamp-2" style="color: var(--text-main)">${item.query}</p>
-                               <span class="text-xs opacity-70 whitespace-nowrap ml-2" style="color: var(--text-muted)">${new Date(item.timestamp).toLocaleDateString()}</span>
+                       <div class="p-4 rounded-xl border hover-lift transition-all" style="border-color: var(--border-color); background: rgba(255,255,255,0.05);">
+                           <div class="flex justify-between items-start mb-2">
+                               <span class="text-xs px-2 py-1 rounded bg-indigo-500/20 text-indigo-400 font-bold uppercase tracking-tighter">AI Analysis</span>
+                               <span class="text-xs opacity-50" style="color: var(--text-muted)">${new Date(item.timestamp).toLocaleDateString()}</span>
                            </div>
+                           <p class="font-bold text-base line-clamp-2" style="color: var(--text-main)">${item.query}</p>
+                           ${item.response_time ? `<div class="mt-2 text-xs opacity-60">🕒 ${item.response_time}s response</div>` : ''}
                        </div>
                    `).join('');
                 } else {
@@ -333,46 +238,54 @@ document.addEventListener('DOMContentLoaded', function() {
                             <p style="color: var(--text-muted)">No recent analyses found</p>
                         </div>`;
                 }
-            })
-            .catch(err => console.log('No history API yet'));
+            });
     }
 
-    function updateQualityMetrics(data) {
-        const container = document.getElementById('quality-metrics');
-        // Simple heuristic for quality based on stats
-        const completeness = Math.min(100, Math.round((data.rows * data.columns) / (data.rows * data.columns + 1) * 100)); // Placeholder logic
+    let distributionChart = null;
+    function renderDistributionChart(numeric, categorical) {
+        const ctx = document.getElementById('distributionChart').getContext('2d');
+        if (distributionChart) distributionChart.destroy();
 
-        container.innerHTML = `
-            <div class="space-y-4">
-                <div>
-                    <div class="flex justify-between mb-1">
-                        <span class="text-sm font-medium" style="color: var(--text-main)">Data Completeness</span>
-                        <span class="text-sm font-bold text-green-500">100%</span>
-                    </div>
-                    <div class="progress-bar"><div class="progress-fill bg-green-500" style="width: 100%"></div></div>
-                </div>
-                <!-- Dynamic placeholders for other metrics -->
-                <div>
-                    <div class="flex justify-between mb-1">
-                        <span class="text-sm font-medium" style="color: var(--text-main)">Memory Usage</span>
-                        <span class="text-sm font-bold text-blue-500">Optimized</span>
-                    </div>
-                    <div class="progress-bar"><div class="progress-fill bg-blue-500" style="width: 85%"></div></div>
-                </div>
-            </div>
-        `;
+        distributionChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Numeric Columns', 'Categorical Columns'],
+                datasets: [{
+                    data: [numeric, categorical],
+                    backgroundColor: ['#6366f1', '#06b6d4'],
+                    borderColor: 'transparent',
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '70%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#e2e8f0',
+                            padding: 20,
+                            font: { size: 14 }
+                        }
+                    }
+                }
+            }
+        });
     }
 
     function animateValue(id, start, end, duration) {
+        const obj = document.getElementById(id);
+        if (!obj) return;
         if (start === end) {
-            document.getElementById(id).innerHTML = end.toLocaleString();
+            obj.innerHTML = end.toLocaleString();
             return;
         }
         const range = end - start;
         let current = start;
         const increment = end > start ? 1 : -1;
         const stepTime = Math.abs(Math.floor(duration / range));
-        const obj = document.getElementById(id);
         const timer = setInterval(function () {
             current += increment;
             obj.innerHTML = current.toLocaleString();
@@ -387,15 +300,11 @@ document.addEventListener('DOMContentLoaded', function() {
             fetch('/api/clear_data', { method: 'POST' })
                 .then(() => {
                     if (typeof showNotification === 'function') showNotification('Data cleared successfully', 'success');
-                    else alert('Data cleared!');
                     refreshDashboard();
                 });
         }
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        refreshDashboard();
-    });
+    document.addEventListener('DOMContentLoaded', refreshDashboard);
 </script>
->>>>>>> b318fad (Enhance UI with rich aesthetics, glassmorphism, dynamic dashboard, and support for all CSV files)
 {% endblock %}

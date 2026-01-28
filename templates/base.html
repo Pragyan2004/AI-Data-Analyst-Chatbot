@@ -1,86 +1,3 @@
-<<<<<<< HEAD
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Data Analyst - {% block title %}{% endblock %}</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/cards.css') }}">
-</head>
-<body class="bg-gradient-to-br from-blue-50 to-indigo-100">
-    <nav class="bg-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center">
-                    <i class="fas fa-robot text-2xl text-blue-600 mr-3"></i>
-                    <span class="font-bold text-xl text-gray-800">AI Data Analyst</span>
-                </div>
-                
-                <div class="hidden md:flex space-x-8">
-                    <a href="{{ url_for('index') }}" class="nav-link">Home</a>
-                    <a href="{{ url_for('dashboard') }}" class="nav-link">Dashboard</a>
-                    <a href="{{ url_for('analyze') }}" class="nav-link">Analyze</a>
-                    <a href="{{ url_for('insights') }}" class="nav-link">Insights</a>
-                    <a href="{{ url_for('history') }}" class="nav-link">History</a>
-                    <a href="{{ url_for('settings') }}" class="nav-link">Settings</a>
-                    <a href="{{ url_for('help') }}" class="nav-link">Help</a>
-                </div>
-                
-                <div class="md:hidden">
-                    <button id="mobile-menu-button" class="text-gray-600">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div id="mobile-menu" class="md:hidden hidden bg-white">
-            <div class="px-2 pt-2 pb-3 space-y-1">
-                <a href="{{ url_for('index') }}" class="block px-3 py-2 text-gray-700">Home</a>
-                <a href="{{ url_for('dashboard') }}" class="block px-3 py-2 text-gray-700">Dashboard</a>
-                <a href="{{ url_for('analyze') }}" class="block px-3 py-2 text-gray-700">Analyze</a>
-                <a href="{{ url_for('insights') }}" class="block px-3 py-2 text-gray-700">Insights</a>
-                <a href="{{ url_for('history') }}" class="block px-3 py-2 text-gray-700">History</a>
-                <a href="{{ url_for('settings') }}" class="block px-3 py-2 text-gray-700">Settings</a>
-                <a href="{{ url_for('help') }}" class="block px-3 py-2 text-gray-700">Help</a>
-            </div>
-        </div>
-    </nav>
-    <div class="floating-cards">
-        <div class="floating-card card-1"><i class="fas fa-chart-line"></i></div>
-        <div class="floating-card card-2"><i class="fas fa-database"></i></div>
-        <div class="floating-card card-3"><i class="fas fa-robot"></i></div>
-        <div class="floating-card card-4"><i class="fas fa-lightbulb"></i></div>
-    </div>
-    <main class="container mx-auto px-4 py-8">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} mb-4">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-        
-        {% block content %}{% endblock %}
-    </main>
-    <footer class="bg-white border-t mt-12">
-        <div class="max-w-7xl mx-auto py-8 px-4">
-            <div class="text-center text-gray-600">
-                <p>&copy; 2025 AI Data Analyst. Built with Flask & Groq AI.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
-    {% block scripts %}{% endblock %}
-</body>
-=======
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 
@@ -117,8 +34,7 @@
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between items-center h-16">
                 <!-- Logo -->
-                <div class="flex items-center group cursor-pointer"
-                    onclick="window.location.href='{{ url_for('index') }}'">
+                <a href="{{ url_for('index') }}" class="flex items-center group">
                     <div
                         class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white mr-3 shadow-lg transform group-hover:rotate-12 transition-transform duration-300">
                         <i class="fas fa-robot text-lg"></i>
@@ -128,14 +44,13 @@
                             Analyst</span>
                         <span class="text-xs font-medium text-indigo-500 tracking-wider">INTELLIGENT INSIGHTS</span>
                     </div>
-                </div>
+                </a>
 
                 <!-- Desktop Nav -->
                 <div class="hidden md:flex items-center space-x-1">
                     <a href="{{ url_for('index') }}" class="nav-link">Home</a>
                     <a href="{{ url_for('dashboard') }}" class="nav-link">Dashboard</a>
                     <a href="{{ url_for('analyze') }}" class="nav-link">Analyze</a>
-                    <a href="{{ url_for('insights') }}" class="nav-link">Insights</a>
                     <a href="{{ url_for('history') }}" class="nav-link">History</a>
                     <a href="{{ url_for('settings') }}" class="nav-link">Settings</a>
 
@@ -173,7 +88,6 @@
                 <a href="{{ url_for('index') }}" class="block px-3 py-2 text-gray-700 nav-link">Home</a>
                 <a href="{{ url_for('dashboard') }}" class="block px-3 py-2 text-gray-700 nav-link">Dashboard</a>
                 <a href="{{ url_for('analyze') }}" class="block px-3 py-2 text-gray-700 nav-link">Analyze</a>
-                <a href="{{ url_for('insights') }}" class="block px-3 py-2 text-gray-700 nav-link">Insights</a>
                 <a href="{{ url_for('history') }}" class="block px-3 py-2 text-gray-700 nav-link">History</a>
                 <a href="{{ url_for('settings') }}" class="block px-3 py-2 text-gray-700 nav-link">Settings</a>
                 <a href="{{ url_for('help') }}" class="block px-3 py-2 text-gray-700 nav-link">Help</a>
@@ -192,7 +106,6 @@
     </div>
 
     <main class="container mx-auto px-4 py-8 relative z-10" style="min-height: 80vh;">
-        <!-- Flash messages placeholder if needed, though replaced by JS toasts below -->
         {% block content %}{% endblock %}
     </main>
 
@@ -211,11 +124,16 @@
     </footer>
 
     <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-json.min.js"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+
+    <script id="flash-data" type="application/json">
+        {{ get_flashed_messages(with_categories=true) | tojson }}
+    </script>
 
     <script>
         // Theme Toggle Logic
@@ -224,13 +142,6 @@
         const htmlElement = document.documentElement;
         const iconSun = document.querySelectorAll('.light-icon');
         const iconMoon = document.querySelectorAll('.dark-icon');
-
-        // Check local storage or system preference
-        const savedTheme = localStorage.getItem('theme');
-        const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        const currentTheme = savedTheme || systemTheme;
-
-        applyTheme(currentTheme);
 
         function applyTheme(theme) {
             htmlElement.setAttribute('data-theme', theme);
@@ -251,39 +162,43 @@
             applyTheme(newTheme);
         }
 
+        // Initialize theme
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        applyTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
+
         if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
         if (themeToggleMobile) themeToggleMobile.addEventListener('click', toggleTheme);
 
         // Flash Messages to JS Toasts
         document.addEventListener('DOMContentLoaded', () => {
-            // Function to safe check if showNotification exists
-            const safeShowNotification = (msg, type) => {
-                if (typeof showNotification === 'function') {
-                    showNotification(msg, type);
-                } else {
-                    console.log('Notification:', msg, type);
+            const flashDataEl = document.getElementById('flash-data');
+            if (flashDataEl) {
+                try {
+                    const flashMessages = JSON.parse(flashDataEl.textContent);
+                    flashMessages.forEach((msg, index) => {
+                        const [category, message] = msg;
+                        setTimeout(() => {
+                            let type = 'info';
+                            let cat = category.toLowerCase();
+                            if (cat.includes('success')) type = 'success';
+                            else if (cat.includes('error') || cat.includes('danger')) type = 'error';
+                            else if (cat.includes('warn')) type = 'warning';
+
+                            if (typeof showNotification === 'function') {
+                                showNotification(message, type);
+                            } else {
+                                console.log('Notification:', message, type);
+                            }
+                        }, index * 300 + 100);
+                    });
+                } catch (e) {
+                    console.error('Error parsing flash messages:', e);
                 }
-            };
-
-            {% with messages = get_flashed_messages(with_categories = true) %}
-            {% if messages %}
-            {% for category, message in messages %}
-            setTimeout(() => {
-                let type = 'info';
-                let cat = '{{ category }}'.toLowerCase();
-                if (cat.includes('success')) type = 'success';
-                else if (cat.includes('error') || cat.includes('danger')) type = 'error';
-                else if (cat.includes('warn')) type = 'warning';
-
-                safeShowNotification({{ message | tojson }}, type);
-            }, { { loop.index0 * 300 + 100 } });
-        {% endfor %}
-        {% endif %}
-        {% endwith %}
+            }
         });
     </script>
     {% block scripts %}{% endblock %}
 </body>
 
->>>>>>> b318fad (Enhance UI with rich aesthetics, glassmorphism, dynamic dashboard, and support for all CSV files)
 </html>
